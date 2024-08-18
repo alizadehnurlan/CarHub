@@ -1,7 +1,7 @@
 'use client'
 import { manufacturers } from '@/constants'
 import { SearchManufacturerProps } from '@/types'
-import { Combobox, ComboboxButton, ComboboxInput, Transition, ComboboxOptions,ComboboxOption } from '@headlessui/react'
+import { Combobox, ComboboxButton, ComboboxInput, Transition, ComboboxOptions, ComboboxOption } from '@headlessui/react'
 import Image from 'next/image'
 import { useState, Fragment } from 'react'
 
@@ -14,13 +14,13 @@ const SearchManufacturer = ({ manufacturer, setManufacturer }: SearchManufacture
       ? manufacturers
       : manufacturers.filter((item) => {
         return item.toLocaleLowerCase()
-        .replace(/\s+/g, "")
-        .includes(query.toLocaleLowerCase().replace(/\s+/g,""))
+          .replace(/\s+/g, "")
+          .includes(query.toLocaleLowerCase().replace(/\s+/g, ""))
       })
 
   return (
     <div className='search-manufacturer'>
-      <Combobox>
+      <Combobox value={manufacturer} onChange={setManufacturer}>
         <div className='relative w-full'>
           <ComboboxButton className='absolute top-[14px]'>
             <Image
@@ -46,23 +46,43 @@ const SearchManufacturer = ({ manufacturer, setManufacturer }: SearchManufacture
             afterLeave={() => Setquery('')}
           >
             <ComboboxOptions>
-              {filteredManufactures.length === 0 ? query !=="" &&(
+              {filteredManufactures.length === 0 ? query !== "" && (
                 <ComboboxOption
-                value={query}
-                className="search-manufacturer__option"
+                  value={query}
+                  className="search-manufacturer__option"
                 >
                   Create "{query}"
                 </ComboboxOption>
               ) : (
-                filteredManufactures.map((item)=>{
-                  return(
+                filteredManufactures.map((item) => {
+                  return (
                     <ComboboxOption
-                    key={item}
-                    className={({active})=>
-                    `relative search-manufacturer__option ${active ? 'bg-primary-blue text-white' : 'text-gray-900'}`}
-                    value={item}
+                      key={item}
+                      className={({ active }) =>
+                        `relative search-manufacturer__option ${active ? 'bg-primary-blue text-white' : 'text-gray-900'}`}
+                      value={item}
                     >
-                      {item}
+                      {({ selected, active }) => {
+                        return (
+                        <>
+                          <span
+                          className={`block truncate ${
+                            selected ? 'font-medium' : 'font-normal'
+                          }`}
+                        >
+                        {item}
+                        </span>
+                        {selected ? (
+                          <span
+                            className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                              active ? 'text-white' : 'text-teal-600'
+                            }`}
+                          >
+                          </span>
+                        ) : null}
+                        </>
+                        )
+                      }}
 
                     </ComboboxOption>
 
